@@ -56,7 +56,8 @@ check-deploy-env:
 ifndef DEPLOY_ENV
 	$(error DEPLOY_ENV is undefined)
 endif
-
+test-spot:
+	cd ansible && AWS_PROFILE=aeternity ansible-playbook -i inventory env.aws.yml -e 'ansible_python_interpreter=python' --private-key ~/.ssh/used_keys/master_key.epoch
 clean:
 	rm -rf ansible/roles
 ifdef VIRTUAL_ENV
