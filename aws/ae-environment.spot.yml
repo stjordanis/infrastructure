@@ -96,8 +96,14 @@ Resources:
             - ImageId: !Ref AmiId
               InstanceType: !Ref InstanceType
               SecurityGroups:
-              - GroupId: !Ref EpochSecurityGroup
-              - GroupId: !Ref ManagementSecurityGroup
+              - GroupId:
+                  Fn::GetAtt:
+                  - EpochSecurityGroup
+                  - GroupId
+              - GroupId:
+                  Fn::GetAtt:
+                  - ManagementSecurityGroup
+                  - GroupId
               UserData:
                 Fn::Base64:
                   |+
