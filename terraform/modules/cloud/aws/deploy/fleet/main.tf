@@ -37,6 +37,14 @@ resource "aws_launch_configuration" "spot" {
   lifecycle {
     create_before_destroy = true
   }
+  user_data = "${data.template_file.user_data.rendered}"
+}
+
+data "template_file" "user_data" {
+  template = "${file("${path.module}/templates/user_data.bash")}"
+  vars = {
+    region = "${data.aws_region.current.name}"
+  }
 }
 
 resource "aws_autoscaling_group" "spot_fleet" {
