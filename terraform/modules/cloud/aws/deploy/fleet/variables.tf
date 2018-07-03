@@ -15,3 +15,5 @@ variable "vpc_id" {}
 variable "subnets" {
   type = "list"
 }
+
+variable "datadog_api_key" {}

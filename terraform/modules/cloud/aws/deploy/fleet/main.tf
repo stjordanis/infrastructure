@@ -28,22 +28,28 @@ resource "aws_instance" "static_node" {
 }
 
 resource "aws_launch_configuration" "spot" {
-  name_prefix     = "ae-${var.env}-spot-nodes_"
-  image_id        = "${data.aws_ami.ami.id}"
-  instance_type   = "${var.instance_type}"
-  spot_price      = "${var.spot_price}"
-  security_groups = ["${aws_security_group.ae-nodes.id}", "${aws_security_group.ae-nodes-management.id}"]
+  name_prefix          = "ae-${var.env}-spot-nodes_"
+  iam_instance_profile = "${aws_iam_instance_profile.epoch.name}"
+  image_id             = "${data.aws_ami.ami.id}"
+  instance_type        = "${var.instance_type}"
+  spot_price           = "${var.spot_price}"
+  security_groups      = ["${aws_security_group.ae-nodes.id}", "${aws_security_group.ae-nodes-management.id}"]
 
   lifecycle {
     create_before_destroy = true
   }
+
   user_data = "${data.template_file.user_data.rendered}"
 }
 
 data "template_file" "user_data" {
   template = "${file("${path.module}/templates/user_data.bash")}"
+
   vars = {
-    region = "${data.aws_region.current.name}"
+    region          = "${data.aws_region.current.name}"
+    datadog_api_key = "${data.aws_kms_ciphertext.secret.ciphertext_blob}"
+    color           = "${var.color}"
+    env             = "${var.env}"
   }
 }
 

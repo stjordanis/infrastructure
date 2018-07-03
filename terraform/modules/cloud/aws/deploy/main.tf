@@ -14,4 +14,6 @@ module "aws_fleet" {
 
   spot_nodes   = "${var.spot_nodes}"
   static_nodes = "${var.static_nodes}"
+
+  datadog_api_key = "${var.datadog_api_key}"
 }
