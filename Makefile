@@ -57,7 +57,7 @@ lint:
 	ansible-lint ansible/manage-node.yml
 	ansible-lint ansible/reset-net.yml
 	packer validate packer/epoch.json
-	cd terraform && terraform init && terraform validate && terraform fmt -check=true -diff=true
+	cd terraform && terraform init && terraform validate -var datadog_api_key=$(DATADOG_API_KEY) && terraform fmt -check=true -diff=true
 
 check-deploy-env:
 ifndef DEPLOY_ENV
