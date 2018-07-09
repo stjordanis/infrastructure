@@ -12,7 +12,7 @@ hostname "aws-$REGION-$IP"
 #SETUP DATADOG
 
 apt-get update
-apt-get install python-pip jq -y
+apt-get install python-pip jq -y #move to packer
 pip install awscli --upgrade
 
 
@@ -35,7 +35,7 @@ URL="https://github.com/aeternity/epoch/releases/download/v$VERSION/$FILE"
 wget -q $URL -O /home/epoch/$FILE
 
 mkdir /home/epoch/node
-tar -xvf /home/epoch/$FILE -C /home/epoch/node
+tar -xf /home/epoch/$FILE -C /home/epoch/node
 chown -R epoch:epoch /home/epoch/node
 
 sudo su -c "/home/epoch/node/bin/epoch start" epoch
