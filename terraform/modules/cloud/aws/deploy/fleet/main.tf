@@ -1,11 +1,26 @@
 data "aws_region" "current" {}
 
+# Hardcode image to prevent Static node to be rotated
 data "aws_ami" "ami" {
   most_recent = true
 
   filter {
     name   = "name"
     values = ["epoch-ubuntu-16.04-v1529955790"]
+  }
+
+  owners = ["self"]
+}
+
+# Diffrent not hardcoded image for spots.
+# There is option that env will bo rotated when new image will be created
+# but spot will install lates epoch there.
+data "aws_ami" "ami_spot" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["epoch-ubuntu-16.04-*"]
   }
 
   owners = ["self"]
@@ -30,7 +45,7 @@ resource "aws_instance" "static_node" {
 resource "aws_launch_configuration" "spot" {
   name_prefix          = "ae-${var.env}-spot-nodes_"
   iam_instance_profile = "${aws_iam_instance_profile.epoch.name}"
-  image_id             = "${data.aws_ami.ami.id}"
+  image_id             = "${data.aws_ami.ami_spot.id}"
   instance_type        = "${var.instance_type}"
   spot_price           = "${var.spot_price}"
   security_groups      = ["${aws_security_group.ae-nodes.id}", "${aws_security_group.ae-nodes-management.id}"]

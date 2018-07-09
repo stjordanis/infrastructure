@@ -11,11 +11,6 @@ hostname "aws-$REGION-$IP"
 
 #SETUP DATADOG
 
-apt-get update
-apt-get install python-pip jq -y #move to packer
-pip install awscli --upgrade
-
-
 DATADOG_API_KEY=`aws --region ${region} secretsmanager get-secret-value --secret-id datadog_api_key  | jq '.SecretString | fromjson | .datadog_api_key'`
 
 sed -i -- "s/DATADOG_API_KEY/$DATADOG_API_KEY/g" /etc/datadog-agent/datadog.yaml
