@@ -10,4 +10,4 @@ variable "instance_type" {}
 
 variable "spot_price" {}
 
-variable "datadog_api_key" {}
+variable "epoch_version" {}

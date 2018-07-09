@@ -16,4 +16,4 @@ variable "subnets" {
   type = "list"
 }
 
-variable "datadog_api_key" {}
+variable "epoch_version" {}

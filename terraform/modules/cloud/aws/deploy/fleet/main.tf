@@ -46,10 +46,10 @@ data "template_file" "user_data" {
   template = "${file("${path.module}/templates/user_data.bash")}"
 
   vars = {
-    region          = "${data.aws_region.current.name}"
-    datadog_api_key = "${data.aws_kms_ciphertext.secret.ciphertext_blob}"
-    color           = "${var.color}"
-    env             = "${var.env}"
+    region        = "${data.aws_region.current.name}"
+    color         = "${var.color}"
+    env           = "${var.env}"
+    epoch_version = "${var.epoch_version}"
   }
 }
 
