@@ -89,6 +89,20 @@ jobs:
           name: Dry run environments playbooks
           command: make test-setup-environments
 
+  check-terraform:
+    <<: *container_config
+    steps:
+      - checkout
+      - *restore_venv
+      - *activate_venv
+      - *install_pip
+      - run:
+          name: Configuration lint terrafomr
+          command: make lint-terrafrom
+      - run:
+          name: Dry run terrafrom plan
+          command: make test-setup-environments-terraform
+
   setup_uat:
     <<: *container_config
     environment:
@@ -175,6 +189,14 @@ workflows:
                 - packer
 
       - check:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - packer
+
+      - check-terraform:
           requires:
             - build
           filters:

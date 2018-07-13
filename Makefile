@@ -50,14 +50,18 @@ test-openstack: pip
 test-setup-environments: pip
 	cd ansible && ansible-playbook -e 'ansible_python_interpreter="/usr/bin/env python"' \
 		--check -i localhost, environments.yml
-	cd terraform && terraform init && terraform plan -var "epoch_version=$(EPOCH_VERSION)"
 
+
+test-setup-environments-terraform: pip
+	cd terraform && terraform init && terraform plan -var "epoch_version=$(EPOCH_VERSION)"
 lint:
 	ansible-lint ansible/setup.yml
 	ansible-lint ansible/monitoring.yml --exclude ansible/roles
 	ansible-lint ansible/manage-node.yml
 	ansible-lint ansible/reset-net.yml
 	packer validate packer/epoch.json
+
+lint-terraform:
 	cd terraform && terraform init
 	cd terraform && terraform validate -var "epoch_version=$(EPOCH_VERSION)"
 	cd terraform && terraform fmt -check=true -diff=true
