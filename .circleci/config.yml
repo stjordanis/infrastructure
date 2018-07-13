@@ -103,7 +103,7 @@ jobs:
       - *install_pip
       - run:
           name: Configuration lint terrafomr
-          command: make lint-terrafrom
+          command: make lint-terraform
       - run:
           name: Dry run terrafrom plan
           command: make test-setup-environments-terraform
