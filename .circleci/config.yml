@@ -36,6 +36,11 @@ references:
       name: Setup infrastructure
       command: make setup-infrastructure
 
+  setup_infra_aws: &setup_infra_aws
+    run:
+      name: Setup infrastructure
+      command: make setup-infrastructure-aws
+
   setup_node: &setup_node
     run:
       name: Setup node

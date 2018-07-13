@@ -25,6 +25,9 @@ setup-infrastructure: ansible/roles check-deploy-env
 		--tags "$(DEPLOY_ENV)" environments.yml
 	cd terraform && terraform init && terraform apply -var "epoch_version=$(EPOCH_VERSION)" --auto-approve
 
+setup-infrastructure-aws: ansible/roles check-deploy-env
+	cd terraform && terraform init && terraform apply -var "epoch_version=$(EPOCH_VERSION)" --auto-approve
+
 setup-node: ansible/roles check-deploy-env
 	cd ansible && ansible-playbook --limit="tag_env_$(DEPLOY_ENV):&tag_role_epoch" setup.yml
 
