@@ -53,8 +53,7 @@ docker run -it --env-file env.list -v ~/.ssh/:/root/.ssh/ aeternity/infrastructu
 Then in the container shell setup your private SSH key:
 
 ```bash
-eval $(ssh-agent)
-ssh-add -k ~/.ssh/id_rsa
+eval $(ssh-agent) && ssh-add -k ~/.ssh/id_rsa
 ```
 
 ## Ansible playbooks
@@ -86,6 +85,19 @@ make manage-node DEPLOY_ENV=integration CMD=restart
 make manage-node DEPLOY_ENV=integration CMD=ping
 ```
 
+### Deploy
+
+To deploy epoch package run:
+```bash
+export PACKAGE=https://github.com/aeternity/epoch/releases/download/v0.17.0/epoch-0.17.0-ubuntu-x86_64.tar.gz
+make deploy DEPLOY_ENV=integration
+```
+
+Additional parameters:
+- DEPLOY_DOWNTIME - schedule a downtime period to mute monitoring alerts
+- DEPLOY_COLOR - some environments might be colored to enable blue/green deployments
+- DEPLOY_DB_VERSION - chain db directory suffix that can be bumped to purge the old db
+
 ### Reset network of nodes
 
 To reset a network of nodes run:
@@ -98,6 +110,17 @@ The playbook does:
 - delete blockchain data
 - delete logs
 - delete chain keys
+
+### Mnesia backups
+
+To backup a Mnesia database (snapshot) run:
+```bash
+make mnesia_backup BACKUP_ENV=integration
+```
+
+Additional parameters:
+- BACKUP_SUFFIX - backup filename suffix, by default the destination file is overwritten (per host), suffix can be used to set unique filename
+- BACKUP_DIR - destination directory of backup files
 
 ## Base images
 

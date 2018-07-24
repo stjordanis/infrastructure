@@ -2,6 +2,9 @@ EPOCH_VERSION =? 0.16.0
 SITE_PACKAGES := $(shell python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 VIRTUAL_ENV_ERR = Python Virtual environment is not active. Run `virtualenv -p python3 .venv/py3 && source .venv/py3/bin/activate`
 .DEFAULT_GOAL := lint
+DEPLOY_DOWNTIME ?= 0
+BACKUP_SUFFIX ?= backup
+BACKUP_DIR ?= /tmp/mnesia_backups
 
 images:
 	packer build packer/epoch.json
@@ -9,7 +12,6 @@ images:
 setup-infrastructure: check-deploy-env
 	cd ansible && ansible-playbook -e 'ansible_python_interpreter="/usr/bin/env python3"' \
 		--tags "$(DEPLOY_ENV)" environments.yml
-	cd terraform && terraform init && terraform apply -var "epoch_version=$(EPOCH_VERSION)" --auto-approve
 
 setup-infrastructure-aws: ansible/roles check-deploy-env
 	cd terraform && terraform init && terraform apply -var "epoch_version=$(EPOCH_VERSION)" --auto-approve
@@ -22,6 +24,20 @@ setup-monitoring: check-deploy-env
 
 setup: setup-infrastructure setup-node setup-monitoring
 
+deploy: check-deploy-env
+	$(eval LIMIT=tag_role_epoch:&tag_env_$(DEPLOY_ENV))
+ifneq ($(DEPLOY_COLOR),)
+	$(eval LIMIT=$(LIMIT):&tag_color_$(DEPLOY_COLOR))
+endif
+	cd ansible && ansible-playbook \
+		--limit="$(LIMIT)" \
+		-e package=$(PACKAGE) \
+		-e hosts_group=tag_env_$(DEPLOY_ENV) \
+		-e env=$(DEPLOY_ENV) \
+		-e downtime=$(DEPLOY_DOWNTIME) \
+		-e db_version=$(DEPLOY_DB_VERSION) \
+		deploy.yml
+
 manage-node: check-deploy-env
 ifndef CMD
 	$(error CMD is undefined, supported commands: start, stop, restart, ping)
@@ -31,6 +47,13 @@ endif
 
 reset-net: check-deploy-env
 	cd ansible && ansible-playbook --limit="tag_env_$(DEPLOY_ENV):&tag_role_epoch" reset-net.yml
+
+mnesia_backup:
+	cd ansible && ansible-playbook \
+		--limit="tag_role_epoch:&tag_env_$(BACKUP_ENV)" \
+		-e download_dir=$(BACKUP_DIR) \
+		-e backup_suffix=$(BACKUP_SUFFIX) \
+		mnesia_backup.yml
 
 test-openstack:
 	openstack stack create test -e openstack/test/create.yml \
