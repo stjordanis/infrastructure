@@ -66,19 +66,11 @@ jobs:
       - run:
           name: Dry run environments playbooks
           command: .circleci/docker-run.sh make test-setup-environments
-
-  check-terraform:
-    <<: *container_config
-    steps:
-      - checkout
-      - *restore_venv
-      - *activate_venv
-      - *install_pip
       - run:
-          name: Configuration lint terrafomr
+          name: Configuration lint terraform
           command: make lint-terraform
       - run:
-          name: Dry run terrafrom plan
+          name: Dry run terraform plan
           command: make test-setup-environments-terraform
 
   setup_uat:
@@ -166,7 +158,7 @@ workflows:
             branches:
               ignore:
                 - packer
-                
+
       - setup_uat:
           requires:
             - build_check
