@@ -26,11 +26,6 @@ references:
       name: Setup infrastructure
       command: make setup-infrastructure
 
-  setup_infra_aws: &setup_infra_aws
-    run:
-      name: Setup infrastructure
-      command: make setup-infrastructure-aws
-
   setup_node: &setup_node
     run:
       name: Setup node
@@ -66,12 +61,6 @@ jobs:
       - run:
           name: Dry run environments playbooks
           command: .circleci/docker-run.sh make test-setup-environments
-      - run:
-          name: Configuration lint terraform
-          command: make lint-terraform
-      - run:
-          name: Dry run terraform plan
-          command: make test-setup-environments-terraform
 
   setup_uat:
     <<: *container_config
@@ -138,22 +127,6 @@ workflows:
     jobs:
       - build_check:
           requires: []
-          filters:
-            branches:
-              ignore:
-                - packer
-
-      - check:
-          requires:
-            - build
-          filters:
-            branches:
-              ignore:
-                - packer
-
-      - check-terraform:
-          requires:
-            - build
           filters:
             branches:
               ignore:
