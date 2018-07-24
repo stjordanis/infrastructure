@@ -1,4 +1,3 @@
-EPOCH_VERSION =? 0.16.0
 SITE_PACKAGES := $(shell python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 VIRTUAL_ENV_ERR = Python Virtual environment is not active. Run `virtualenv -p python3 .venv/py3 && source .venv/py3/bin/activate`
 .DEFAULT_GOAL := lint
@@ -14,7 +13,7 @@ setup-infrastructure: check-deploy-env
 		--tags "$(DEPLOY_ENV)" environments.yml
 
 setup-infrastructure-aws: ansible/roles check-deploy-env
-	cd terraform && terraform init && terraform apply -var "epoch_version=$(EPOCH_VERSION)" --auto-approve
+	cd terraform && terraform init && terraform apply --auto-approve
 
 setup-node: check-deploy-env
 	cd ansible && ansible-playbook --limit="tag_env_$(DEPLOY_ENV):&tag_role_epoch" setup.yml
@@ -65,7 +64,7 @@ test-setup-environments:
 
 
 test-setup-environments-terraform: pip
-	cd terraform && terraform init && terraform plan -var "epoch_version=$(EPOCH_VERSION)"
+	cd terraform && terraform init && terraform plan
 lint:
 	ansible-lint ansible/setup.yml
 	ansible-lint ansible/monitoring.yml --exclude ~/.ansible/roles
@@ -75,7 +74,7 @@ lint:
 
 lint-terraform:
 	cd terraform && terraform init
-	cd terraform && terraform validate -var "epoch_version=$(EPOCH_VERSION)"
+	cd terraform && terraform validate
 	cd terraform && terraform fmt -check=true -diff=true
 
 check-deploy-env:
