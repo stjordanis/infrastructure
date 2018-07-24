@@ -1,5 +1,3 @@
-SITE_PACKAGES := $(shell python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
-VIRTUAL_ENV_ERR = Python Virtual environment is not active. Run `virtualenv -p python3 .venv/py3 && source .venv/py3/bin/activate`
 .DEFAULT_GOAL := lint
 DEPLOY_DOWNTIME ?= 0
 BACKUP_SUFFIX ?= backup
@@ -9,10 +7,9 @@ images:
 	packer build packer/epoch.json
 
 setup-infrastructure: check-deploy-env
-	cd ansible && ansible-playbook -e 'ansible_python_interpreter="/usr/bin/env python3"' \
-		--tags "$(DEPLOY_ENV)" environments.yml
+	cd ansible && ansible-playbook --tags "$(DEPLOY_ENV)" environments.yml
 
-setup-infrastructure-aws: ansible/roles check-deploy-env
+setup-infrastructure-aws: check-deploy-env
 	cd terraform && terraform init && terraform apply --auto-approve
 
 setup-node: check-deploy-env
@@ -59,12 +56,11 @@ test-openstack:
 		-t openstack/ae-environment.yml --enable-rollback --wait --dry-run
 
 test-setup-environments:
-	cd ansible && ansible-playbook -e 'ansible_python_interpreter="/usr/bin/env python3"' \
-		--check -i localhost, environments.yml
+	cd ansible && ansible-playbook --check -i localhost, environments.yml
 
-
-test-setup-environments-terraform: pip
+test-setup-environments-terraform:
 	cd terraform && terraform init && terraform plan
+
 lint:
 	ansible-lint ansible/setup.yml
 	ansible-lint ansible/monitoring.yml --exclude ~/.ansible/roles
@@ -74,7 +70,7 @@ lint:
 
 lint-terraform:
 	cd terraform && terraform init
-	cd terraform && terraform validate
+	cd terraform &&	terraform validate
 	cd terraform && terraform fmt -check=true -diff=true
 
 check-deploy-env:
