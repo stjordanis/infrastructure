@@ -15,5 +15,5 @@ module "aws_fleet" {
   spot_nodes   = "${var.spot_nodes}"
   static_nodes = "${var.static_nodes}"
 
-  epoch        = "${var.epoch}"
+  epoch = "${var.epoch}"
 }

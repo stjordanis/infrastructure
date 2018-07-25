@@ -39,6 +39,7 @@ module "aws_deploy-ap-southeast-1" {
 
   epoch = {
     version = "0.18.0"
+
     # The string must be bash escaped
     beneficiary = "ak\\$tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"
   }
@@ -61,6 +62,7 @@ module "aws_deploy-eu-central-1" {
 
   epoch = {
     version = "0.18.0"
+
     # The string must be bash escaped
     beneficiary = "ak\\$tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"
   }
@@ -83,6 +85,7 @@ module "aws_deploy-us-west-2" {
 
   epoch = {
     version = "0.18.0"
+
     # The string must be bash escaped
     beneficiary = "ak\\$tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"
   }
