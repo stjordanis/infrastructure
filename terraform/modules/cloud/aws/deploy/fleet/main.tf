@@ -1,6 +1,6 @@
 data "aws_region" "current" {}
 
-# Hardcode image to prevent Static node to be rotated
+# Hardcode image to prevent Static node to be rotated on new image version releases
 data "aws_ami" "ami" {
   most_recent = true
 
@@ -12,9 +12,9 @@ data "aws_ami" "ami" {
   owners = ["self"]
 }
 
-# Diffrent not hardcoded image for spots.
-# There is option that env will bo rotated when new image will be created
-# but spot will install lates epoch there.
+# Different not hardcoded image for spots.
+# There is option that env will be rotated when new image will be created
+# but spot will install latest epoch version there.
 data "aws_ami" "ami_spot" {
   most_recent = true
 
