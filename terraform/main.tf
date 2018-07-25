@@ -37,7 +37,11 @@ module "aws_deploy-ap-southeast-1" {
   spot_price    = "0.125"
   instance_type = "m4.large"
 
-  epoch_version = "0.18.0"
+  epoch = {
+    version = "0.18.0"
+    # The string must be bash escaped
+    beneficiary = "ak\\$tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"
+  }
 
   providers = {
     aws = "aws.ap-southeast-1"
@@ -55,7 +59,11 @@ module "aws_deploy-eu-central-1" {
   spot_price    = "0.125"
   instance_type = "m4.large"
 
-  epoch_version = "0.18.0"
+  epoch = {
+    version = "0.18.0"
+    # The string must be bash escaped
+    beneficiary = "ak\\$tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"
+  }
 
   providers = {
     aws = "aws.eu-central-1"
@@ -73,7 +81,11 @@ module "aws_deploy-us-west-2" {
   spot_price    = "0.125"
   instance_type = "m4.large"
 
-  epoch_version = "0.18.0"
+  epoch = {
+    version = "0.18.0"
+    # The string must be bash escaped
+    beneficiary = "ak\\$tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"
+  }
 
   providers = {
     aws = "aws.us-west-2"

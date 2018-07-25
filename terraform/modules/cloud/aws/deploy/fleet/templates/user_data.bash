@@ -33,4 +33,18 @@ mkdir /home/epoch/node
 tar -xf /home/epoch/$FILE -C /home/epoch/node
 chown -R epoch:epoch /home/epoch/node
 
+cat > /home/epoch/node/epoch.yaml << EOF
+---
+chain:
+    persist: true
+
+mining:
+    autostart: true
+    beneficiary: "${epoch_beneficiary}"
+
+logging:
+    level: warning
+
+EOF
+
 sudo su -c "/home/epoch/node/bin/epoch start" epoch

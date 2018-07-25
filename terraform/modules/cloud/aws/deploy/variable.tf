@@ -10,4 +10,7 @@ variable "instance_type" {}
 
 variable "spot_price" {}
 
-variable "epoch_version" {}
+variable "epoch" {
+  type = "map"
+  default = {}
+}

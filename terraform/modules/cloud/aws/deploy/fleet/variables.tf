@@ -16,4 +16,7 @@ variable "subnets" {
   type = "list"
 }
 
-variable "epoch_version" {}
+variable "epoch" {
+  type = "map"
+  default = {}
+}
