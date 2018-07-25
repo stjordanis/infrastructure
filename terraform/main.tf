@@ -26,8 +26,6 @@ provider "aws" {
   profile                 = "aeternity"
 }
 
-variable "epoch_version" {}
-
 module "aws_deploy-ap-southeast-1" {
   source = "modules/cloud/aws/deploy"
   env    = "uat"
