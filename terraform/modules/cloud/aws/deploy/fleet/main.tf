@@ -38,6 +38,8 @@ resource "aws_instance" "static_node" {
     color = "${var.color}"
   }
 
+  user_data = "${data.template_file.user_data.rendered}"
+
   subnet_id              = "${element( var.subnets, 1)}"
   vpc_security_group_ids = ["${aws_security_group.ae-nodes.id}", "${aws_security_group.ae-nodes-management.id}"]
 }
