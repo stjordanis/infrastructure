@@ -9,7 +9,7 @@ images:
 setup-infrastructure: check-deploy-env
 	cd ansible && ansible-playbook --tags "$(DEPLOY_ENV)" environments.yml
 
-setup-infrastructure-aws: check-deploy-env
+setup-terraform:
 	cd terraform && terraform init && terraform apply --auto-approve
 
 setup-node: check-deploy-env
@@ -57,8 +57,6 @@ test-openstack:
 
 test-setup-environments:
 	cd ansible && ansible-playbook --check -i localhost, environments.yml
-
-test-setup-environments-terraform:
 	cd terraform && terraform init && terraform plan
 
 lint:
@@ -67,11 +65,7 @@ lint:
 	ansible-lint ansible/manage-node.yml
 	ansible-lint ansible/reset-net.yml
 	packer validate packer/epoch.json
-
-lint-terraform:
-	cd terraform && terraform init
-	cd terraform &&	terraform validate
-	cd terraform && terraform fmt -check=true -diff=true
+	cd terraform && terraform init && terraform validate && terraform fmt -check=true -diff=true
 
 check-deploy-env:
 ifndef DEPLOY_ENV
@@ -79,6 +73,6 @@ ifndef DEPLOY_ENV
 endif
 
 .PHONY: \
-	images setup-infrastructure setup-node setup-monitoring setup \
+	images setup-infrastructure setup-terraform setup-node setup-monitoring setup \
 	manage-node reset-net lint test-openstack test-setup-environments \
 	check-deploy-env
