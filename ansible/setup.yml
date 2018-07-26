@@ -78,11 +78,22 @@
     - name: Install dev tools
       apt:
         pkg: "{{ item }}"
-        state: installed
+        state: present
         update_cache: yes
       with_items:
         - build-essential
         - python-yaml
+        - python-pip
+        - python3-pip
+        - jq
+      tags:
+        - dev-tools
+
+    - name: Install pip tools
+      pip:
+        name: "{{ item }}"
+      with_items:
+        - awscli
       tags:
         - dev-tools
 
