@@ -18,5 +18,4 @@ variable "subnets" {
 
 variable "epoch" {
   type    = "map"
-  default = {}
 }
