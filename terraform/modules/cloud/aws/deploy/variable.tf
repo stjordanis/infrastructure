@@ -11,6 +11,5 @@ variable "instance_type" {}
 variable "spot_price" {}
 
 variable "epoch" {
-  type    = "map"
-  default = {}
+  type = "map"
 }
