@@ -27,9 +27,10 @@ data "aws_ami" "ami_spot" {
 }
 
 resource "aws_instance" "static_node" {
-  count         = "${var.static_nodes}"
-  ami           = "${data.aws_ami.ami.id}"
-  instance_type = "${var.instance_type}"
+  count                = "${var.static_nodes}"
+  ami                  = "${data.aws_ami.ami.id}"
+  instance_type        = "${var.instance_type}"
+  iam_instance_profile = "${aws_iam_instance_profile.epoch.name}"
 
   tags {
     Name  = "ae-${var.env}-static-node"
